@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cartoon World</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Nunito", sans-serif;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+      }
+
+      h1 {
+        font-family: "Fredoka One", cursive;
+        font-size: 3rem;
+        color: #ffffff;
+        text-shadow: 3px 3px 0 #ff6b81;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: white;
+        margin-bottom: 30px;
+        font-weight: 600;
+      }
+
+      .dropdown-wrapper {
+        width: 320px;
+        position: relative;
+      }
+
+      .dropdown-btn {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 15px;
+        background: #ff6b81;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .dropdown-list {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        display: none;
+        overflow: hidden;
+      }
+
+      .dropdown-list.show {
+        display: block;
+      }
+
+      .character-item {
+        padding: 12px 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+      }
+
+      .character-item:hover {
+        background: #ffe4ec;
+      }
+
+      .display-area {
+        margin-top: 40px;
+        width: 350px;
+      }
+
+      .char-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        display: none;
+      }
+
+      .char-card.visible {
+        display: block;
+      }
+
+      .char-card h2 {
+        font-family: "Fredoka One";
+        color: #ff6b81;
+        margin-bottom: 5px;
+      }
+
+      .char-show {
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+
+      .img-frame {
+        width: 200px;
+        height: 200px;
+        margin: auto;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 5px solid #ff6b81;
+        margin-bottom: 15px;
+      }
+
+      .img-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .char-desc {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 10px;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 6px 14px;
+        background: #4ecdc4;
+        color: white;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .placeholder {
+        text-align: center;
+        color: white;
+        font-size: 18px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>🎬 Cartoon World</h1>
+    <p class="subtitle">Choose your favorite cartoon!</p>
+
+    <div class="dropdown-wrapper">
+      <button class="dropdown-btn" onclick="toggleDropdown()" id="btnLabel">
+        Choose a Character ▼
+      </button>
+
+      <div class="dropdown-list" id="dropList"></div>
+    </div>
+
+    <div class="display-area">
+      <div class="char-card" id="charCard">
+        <h2 id="charName"></h2>
+        <div class="char-show" id="charShow"></div>
+
+        <div class="img-frame">
+          <img id="charImg" />
+        </div>
+
+        <p class="char-desc" id="charDesc"></p>
+
+        <span class="tag" id="charTag"></span>
+      </div>
+
+      <div class="placeholder" id="placeholder">
+        🍿 Select a character to see it here!
+      </div>
+    </div>
+
+    <script>
+      const characters = [
+        {
+          name: "SpongeBob SquarePants",
+          show: "SpongeBob SquarePants",
+          emoji: "🧽",
+          img: "https://static.wikia.nocookie.net/viacom4633/images/4/47/Spongebob.png/revision/latest?cb=20241216025934",
+          desc: "A happy sea sponge who lives in a pineapple under the sea.",
+          tag: "Nickelodeon",
+        },
+
+        {
+          name: "Tom Cat",
+          show: "Tom and Jerry",
+          emoji: "🐱",
+          img: "https://static.wikia.nocookie.net/metro-goldwyn-mayer-cartoons/images/8/85/Tom_be2af94.webp/revision/latest?cb=20240809235151",
+          desc: "A funny cat always chasing Jerry the mouse.",
+          tag: "MGM",
+        },
+
+        {
+          name: "Bugs Bunny",
+          show: "Looney Tunes",
+          emoji: "🐰",
+          img: "https://static.wikia.nocookie.net/looneytunesshow/images/6/64/Bugs_bunny.png/revision/latest?cb=20240217201842",
+          desc: "The clever rabbit who loves carrots.",
+          tag: "Warner Bros",
+        },
+
+        {
+          name: "Pikachu",
+          show: "Pokemon",
+          emoji: "⚡",
+          img: "https://www.citypng.com/public/uploads/preview/cartoon-pokemon-pikachu-character-download-png-701751694871379tj5guhemt6.png",
+          desc: "The famous electric Pokémon.",
+          tag: "Nintendo",
+        },
+
+        {
+          name: "Scooby-Doo",
+          show: "Scooby-Doo",
+          emoji: "🐶",
+          img: "https://static.wikia.nocookie.net/great-characters/images/6/6e/Scoobert.png/revision/latest?cb=20181102135349",
+          desc: "A mystery solving dog with his friends.",
+          tag: "Hanna-Barbera",
+        },
+      ];
+
+      const dropList = document.getElementById("dropList");
+
+      characters.forEach((c, i) => {
+        const item = document.createElement("div");
+
+        item.className = "character-item";
+
+        item.innerHTML = `${c.emoji} ${c.name}`;
+
+        item.onclick = () => selectCharacter(i);
+
+        dropList.appendChild(item);
+      });
+
+      function toggleDropdown() {
+        dropList.classList.toggle("show");
+      }
+
+      function selectCharacter(i) {
+        const c = characters[i];
+
+        document.getElementById("btnLabel").innerText = c.emoji + " " + c.name;
+
+        document.getElementById("charName").innerText = c.name;
+
+        document.getElementById("charShow").innerText = c.show;
+
+        document.getElementById("charDesc").innerText = c.desc;
+
+        document.getElementById("charTag").innerText = c.tag;
+
+        document.getElementById("charImg").src = c.img;
+
+        document.getElementById("charCard").classList.add("visible");
+
+        document.getElementById("placeholder").style.display = "none";
+
+        dropList.classList.remove("show");
+      }
+    </script>
+  </body>
+</html>
+```
